@@ -492,19 +492,6 @@ header {
             }
         }
     }
-
-    .container::before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-image: url('../images/image.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        filter: blur(7px);
-        z-index: -1;
-    }
 }
 
 #services {
@@ -593,7 +580,18 @@ header {
         }
     }
 
-    
+    .container::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('../images/image.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(7px);
+        z-index: -1;
+    }
 }
 
 #projects .container {
