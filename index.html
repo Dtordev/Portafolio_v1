@@ -292,26 +292,29 @@
                 <!-- <p>Ponte en contacto conmigo</p> -->
                 <form id="form">
                     <div class="box">
-                        <input id="" class="" name="" type="text" maxlength="40" autocomplete="off" required>
+                        <input id="name" type="text" maxlength="40" autocomplete="off" required>
                         <label>Nombre</label>
                     </div>
                     <div class="box">
-                        <input id="" class="" name="" type="text" maxlength="40" autocomplete="off" required>
+                        <input id="email" type="text" maxlength="60" autocomplete="off" required>
                         <label>Correo</label>
                     </div>
                     <div class="box">
-                        <input id="" class="" name="" type="text" maxlength="40" autocomplete="off" required>
+                        <input id="subject" type="text" maxlength="60" autocomplete="off" required>
                         <label>Asunto</label>
                     </div>
                     <div class="box">
-                        <textarea id="" class="" name="" placeholder="¿Como puedo ayudarte?" maxlength="350"
+                        <textarea id="message" placeholder="Quiero contactar contigo." maxlength="150"
                             autocomplete="off" required></textarea>
                         <label>Escríbeme un mensaje</label>
                     </div>
-                    <p id="alert">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, harum ex quod
-                        voluptates.</p>
+                    <p id="alert">Por favor revisa que los campos coloreados no se encuentren vacíos y/o el correo este
+                        correcto.</p>
                     <div class="box">
-                        <button>Enviar</button>
+                        <button class="btn-form" onclick="validateForm()">Enviar</button>
+                        <div class="code-loader">
+                            <span>{</span><span>}</span>
+                        </div>
                     </div>
                 </form>
             </div>

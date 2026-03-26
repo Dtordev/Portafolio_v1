@@ -677,6 +677,10 @@ header {
                 place-items: center;
                 margin-block: 15px;
 
+                .empty {
+                    border: 0.5px solid var(--clr3);
+                }
+
                 input,
                 textarea {
                     font-family: 'Lucida Sans Unicode';
@@ -756,7 +760,7 @@ header {
             #alert {
                 font-size: .8rem;
                 margin-inline: 4%;
-                /* display: none; */
+                display: none;
                 color: var(--clr3);
             }
         }

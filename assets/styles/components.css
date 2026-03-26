@@ -103,6 +103,33 @@
 
 /************************************** Contact **************************************/
 
+.code-loader {
+    color: var(--clr1);
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-weight: bold;
+    font-size: 2rem;
+    opacity: 0.8;
+    display: none;
+}
+
+.code-loader span {
+    display: inline-block;
+    animation: pulse_414 0.4s alternate infinite ease-in-out;
+}
+
+.code-loader span:nth-child(odd) {
+    animation-delay: 0.4s;
+}
+
+@keyframes pulse_414 {
+    to {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+/**********************************************************/
+
 .typewriter {
     --blue: #02befe;
     --blue-dark: #525bff;

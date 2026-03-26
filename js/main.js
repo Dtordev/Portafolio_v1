@@ -53,6 +53,58 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("knowledge").innerHTML = html2nd;
 })
 
+document.getElementById('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+})
+
+function validateForm() {
+    let name = document.getElementById('name').value;
+    let email = document.getElementById('email').value;
+    let subject = document.getElementById('subject').value;
+    let message = document.getElementById('message').value;
+
+    const Data = {
+        Name: { Value: name, Id: 'name' },
+        Email: { Value: email, Id: 'email', Type: 'email' },
+        Subject: { Value: subject, Id: 'subject' },
+        Message: { Value: message, Id: 'message' }
+    };
+
+    var count = validateData(Data);
+
+    if (count > 0) {
+        document.getElementById('alert').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('alert').style.display = 'none';
+    document.querySelector('.code-loader').style.display = 'flex';
+    document.querySelector('.btn-form').style.display = 'none';
+    sendEmail(Data);
+}
+
+async function sendEmail(Data) {
+    console.log(Data);
+}
+
+function validateData(data) {
+    let Count = 0;
+    Object.values(data).forEach((item) => {
+        if (!item.Value?.trim() || (item.Type === "email" && !validateEmail(item.Value))) {
+            document.getElementById(item.Id).classList.add("empty");
+            Count++;
+        } else {
+            document.getElementById(item.Id).classList.remove("empty");
+        }
+    });
+    return Count;
+}
+
+function validateEmail(email) {
+    var valid = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    return valid.test(email);
+}
+
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
