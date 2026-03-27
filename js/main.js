@@ -36,17 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
             itech++;
             html1st += `
                 <div class="tech">
-                    <h4>${item.Nombre}</h4>
-                    <img style="--clr: ${item.Color}" src="${item.Link}">
+                <h4>${item.Nombre}</h4>
+                <img style="--clr: ${item.Color}" src="${item.Link}">
                 </div>`;
         } else {
             html2nd += `
                 <a>
-                    <div>${item.Nombre}</div>
+                <div>${item.Nombre}</div>
                 </a>`;
         }
 
-        if (i > 14) break;
+        if (i > 13) break;
     }
 
     document.getElementById("technologies").innerHTML = html1st;
@@ -58,17 +58,25 @@ document.getElementById('form').addEventListener('submit', function (event) {
     event.preventDefault();
 })
 
-function validateForm() {
-    let name = document.getElementById('name').value;
-    let email = document.getElementById('email').value;
-    let subject = document.getElementById('subject').value;
-    let message = document.getElementById('message').value;
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+let isSending = false;
+
+async function validateForm() {
+    const form = document.getElementById('form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
     const Data = {
-        Name: { Value: name, Id: 'name' },
-        Email: { Value: email, Id: 'email', Type: 'email' },
-        Subject: { Value: subject, Id: 'subject' },
-        Message: { Value: message, Id: 'message' }
+        Name: { Value: data.name, Id: 'name' },
+        Email: { Value: data.email, Id: 'email', Type: 'email' },
+        Subject: { Value: data.subject, Id: 'subject' },
+        Message: { Value: data.message, Id: 'message' }
     };
 
     var count = validateData(Data);
@@ -79,50 +87,35 @@ function validateForm() {
     }
 
     document.getElementById('alert').style.display = 'none';
-    document.querySelector('.code-loader').style.display = 'flex';
-    document.querySelector('.btn-form').style.display = 'none';
-    sendNotification(Data);
-}
 
-async function sendNotification(Data) {
-    try {
-        await emailjs.send(
-            "service_hmldngi",
-            "template_lyttmcz",
-            {
-                name: Data.Name.Value,
-                mail: Data.Email.Value,
-                subject: Data.Subject.Value,
-                message: Data.Message.Value
-            }
-        );
-        // éxito
-        alert("Mensaje enviado correctamente");
-        sendConfirmation(Data)
-    } catch (error) {
-        console.error(`Mensaje de notificación no enviado: ${error}`);
-    } finally {
-        document.querySelector('.btn-form').style.display = 'block';
-        document.querySelector('.code-loader').style.display = 'none';
-        document.getElementById('form').reset();
+    if (isSending) return;
+
+    const lastSend = localStorage.getItem("lastSend");
+    const now = Date.now();
+
+    if (lastSend && now - lastSend < 60000) {
+        alert("Espera un momento antes de enviar otro mensaje");
+        return;
     }
-}
 
-async function sendConfirmation(Data) {
+    isSending = true;
+    toggleLoading(true);
+
     try {
-        await emailjs.send(
-            "service_hmldngi",
-            "template_0fobwnh",
-            {
-                name: Data.Name.Value,
-                mail: Data.Email.Value,
-                subject: Data.Subject.Value,
-                message: Data.Message.Value
-            }
-        );
-        console.log("Mensaje de confirmación enviado correctamente");
+        await sendNotification(data);
+
+        localStorage.setItem("lastSend", now);
+        alert("Mensaje enviado correctamente");
+        form.reset();
+
+        sendConfirmation(data).catch(error => {
+            console.warn("No se pudo enviar confirmación:", error);
+        });
     } catch (error) {
-        console.error(`Mensaje de confirmación no enviado: ${error}`);
+        console.error("No se pudo enviar notificación:", error);
+    } finally {
+        toggleLoading(false);
+        isSending = false;
     }
 }
 
@@ -144,9 +137,33 @@ function validateEmail(email) {
     return valid.test(email);
 }
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+function toggleLoading(isLoading) {
+    document.querySelector('.btn-form').style.display = isLoading ? 'none' : 'block';
+    document.querySelector('.code-loader').style.display = isLoading ? 'flex' : 'none';
+}
+
+async function sendNotification(data) {
+    return await emailjs.send(
+        "service_hmldngi",
+        "template_lyttmcz",
+        {
+            name: data.name,
+            mail: data.email,
+            subject: data.subject,
+            message: data.message
+        }
+    );
+}
+
+async function sendConfirmation(data) {
+    return await emailjs.send(
+        "service_hmldngi",
+        "template_0fobwnh",
+        {
+            name: data.name,
+            mail: data.email,
+            subject: data.subject,
+            message: data.message
+        }
+    );
 }
