@@ -54,6 +54,26 @@ document.addEventListener("DOMContentLoaded", () => {
     emailjs.init("DN_48DnHWzQqTgoLS");
 })
 
+const offset = 65;
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+
+        const y = target.getBoundingClientRect().top 
+                + window.pageYOffset 
+                - offset;
+
+        window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+        });
+    });
+});
+
 document.getElementById('form').addEventListener('submit', function (event) {
     event.preventDefault();
 })
